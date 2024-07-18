@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+
+    public class ProductsController : BaseApiController // 继承父类后 删除root和apiController属性
     {
         private readonly StoreContext _context;
         public ProductsController(StoreContext context)
@@ -26,7 +25,10 @@ namespace API.Controllers
         [HttpGet("{id}")]  // eg: api/products/3
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            return await _context.Products.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null) return NotFound();
+            return product;
         }
 
 

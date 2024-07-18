@@ -1,8 +1,9 @@
-import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
-import axios from "axios";
+import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow,  Typography } from "@mui/material";
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
+import agent from "../../app/api/agent";
 
 export default function ProductDetails() {
     const { id } = useParams<{ id: string }>();  // 从useParams中获得产品的id
@@ -10,9 +11,9 @@ export default function ProductDetails() {
     const [loading, setLoading] = useState(true); // add loading state
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/products/${id}`)  //此时的id从useParams中获得
-            .then(response => setProduct(response.data))  // get response-data
-            .catch(error => console.log(error))  // check errors
+        id && agent.Catalog.details(parseInt(id)) //此时的id从useParams中获得
+            .then(response => setProduct(response))  // get response-data
+            .catch(error => console.log(error.response))  // check errors
             .finally(() => setLoading(false));
     }, [id]) //当依赖项参数id改变时，useEffect会被再次调用
 
@@ -58,31 +59,7 @@ export default function ProductDetails() {
                     </Table>
                 </TableContainer>
 
-                <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <TextField
-                            onChange={handleInputChange}
-                            variant={'outlined'}
-                            type={'number'}
-                            label={'Quantity in Cart'}
-                            fullWidth
-                            value={quantity}
-                        />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <LoadingButton
-                            disabled={item?.quantity === quantity || !item && quantity === 0}
-                            loading={status.includes('pending')}
-                            onClick={handleUpdateCart}
-                            sx={{ height: '55px' }}
-                            color={'primary'}
-                            size={'large'}
-                            variant={'contained'}
-                            fullWidth>
-                            {item ? 'Update Quantity' : 'Add to Cart'}
-                        </LoadingButton>
-                    </Grid>
-                </Grid>
+
             </Grid>            
         </Grid>
     )

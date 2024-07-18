@@ -1,4 +1,5 @@
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddCors();  // 由于frontend用3000 port，backed用5000 port�
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.    app中的middleware内容顺序比较重要
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -43,7 +46,7 @@ var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 try
 {
     context.Database.Migrate();
-    DbInitializer.Initialize(context);
+    DbInitializer.Initialize(context);   // 调用初始化方法
 }
 catch (Exception ex)
 {

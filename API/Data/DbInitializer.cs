@@ -15,198 +15,124 @@ namespace API.Data
             {
                 new Product
                 {
-                    Name = "Angular Speedster Board 2000",
+                    Name = "AAA Purple Hat",
                     Description =
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 20000,
-                    PictureUrl = "/images/products/sb-ang1.png",
-                    Brand = "Angular",
-                    Type = "Boards",
+                        "Product's description...Nice Hat",
+                    Price = 300,
+                    PictureUrl = "/images/products/hat-purple.png",
+                    Brand = "AAA",
+                    Type = "Hats",
                     QuantityInStock = 100
                 },
                 new Product
                 {
-                    Name = "Green Angular Board 3000",
-                    Description = "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.",
-                    Price = 15000,
-                    PictureUrl = "/images/products/sb-ang2.png",
-                    Brand = "Angular",
-                    Type = "Boards",
+                    Name = "AAA Pink Hat",
+                    Description =
+                        "Product's description...Nice Hat",
+                    Price = 300,
+                    PictureUrl = "/images/products/hat-pink.png",
+                    Brand = "AAA",
+                    Type = "Hats",
                     QuantityInStock = 100
                 },
                 new Product
                 {
-                    Name = "Core Board Speed Rush 3",
+                    Name = "BBB White Hat",
                     Description =
-                        "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
+                        "Product's description...Nice Hat", 
+                    Price = 500,
+                    PictureUrl = "/images/products/hat-white.png",
+                    Brand = "BBB",
+                    Type = "Hats",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "BBB Black Gloves",
+                    Description =
+                        "Product's description...Nice winter gloves",
+                    Price = 400,
+                    PictureUrl = "/images/products/glove-black.png",
+                    Brand = "BBB",
+                    Type = "Gloves",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "CCC Purple Gloves",
+                    Description =
+                        "Product's description...Nice Gloves",
+                    Price = 300,
+                    PictureUrl = "/images/products/glove-purple.png",
+                    Brand = "CCC",
+                    Type = "Gloves",
+                    QuantityInStock = 100
+                },
+                               
+                new Product
+                {
+                    Name = "DDD purple Boots",
+                    Description =
+                        "Product's description...Nice Boots",
+                    Price = 2500,
+                    PictureUrl = "/images/products/boot-purple.png",
+                    Brand = "DDD",
+                    Type = "Boots",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "DDD Black Boots",
+                    Description =
+                        "Product's description...Nice Boots",
+                    Price = 1899,
+                    PictureUrl = "/images/products/boot-black.png",
+                    Brand = "DDD",
+                    Type = "Boots",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "DDD Beige Dress",
+                    Description =
+                        "Product's description...Nice Dress",
+                    Price = 900,
+                    PictureUrl = "/images/products/dress-beige.png",
+                    Brand = "DDD",
+                    Type = "Dress",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "DDD Blue Dress",
+                    Description =
+                        "Product's description...Nice Dress",
+                    Price = 800,
+                    PictureUrl = "/images/products/dress-blue.png",
+                    Brand = "DDD",
+                    Type = "Dress",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "EEE Black Smartphone",
+                    Description =
+                        "Product's description...greate smartphone",
+                    Price = 21000,
+                    PictureUrl = "/images/products/smartphone-black.png",
+                    Brand = "EEE",
+                    Type = "Smartphone",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "EEE Purple Smartphone",
+                    Description =
+                        "Product's description...greate smartphone",
                     Price = 18000,
-                    PictureUrl = "/images/products/sb-core1.png",
-                    Brand = "NetCore",
-                    Type = "Boards",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Net Core Super Board",
-                    Description =
-                        "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
-                    Price = 30000,
-                    PictureUrl = "/images/products/sb-core2.png",
-                    Brand = "NetCore",
-                    Type = "Boards",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "React Board Super Whizzy Fast",
-                    Description =
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 25000,
-                    PictureUrl = "/images/products/sb-react1.png",
-                    Brand = "React",
-                    Type = "Boards",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Typescript Entry Board",
-                    Description =
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 12000,
-                    PictureUrl = "/images/products/sb-ts1.png",
-                    Brand = "TypeScript",
-                    Type = "Boards",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Core Blue Hat",
-                    Description =
-                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 1000,
-                    PictureUrl = "/images/products/hat-core1.png",
-                    Brand = "NetCore",
-                    Type = "Hats",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Green React Woolen Hat",
-                    Description =
-                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 8000,
-                    PictureUrl = "/images/products/hat-react1.png",
-                    Brand = "React",
-                    Type = "Hats",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Purple React Woolen Hat",
-                    Description =
-                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 1500,
-                    PictureUrl = "/images/products/hat-react2.png",
-                    Brand = "React",
-                    Type = "Hats",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Blue Code Gloves",
-                    Description =
-                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 1800,
-                    PictureUrl = "/images/products/glove-code1.png",
-                    Brand = "VS Code",
-                    Type = "Gloves",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Green Code Gloves",
-                    Description =
-                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 1500,
-                    PictureUrl = "/images/products/glove-code2.png",
-                    Brand = "VS Code",
-                    Type = "Gloves",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Purple React Gloves",
-                    Description =
-                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 1600,
-                    PictureUrl = "/images/products/glove-react1.png",
-                    Brand = "React",
-                    Type = "Gloves",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Green React Gloves",
-                    Description =
-                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 1400,
-                    PictureUrl = "/images/products/glove-react2.png",
-                    Brand = "React",
-                    Type = "Gloves",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Redis Red Boots",
-                    Description =
-                        "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
-                    Price = 25000,
-                    PictureUrl = "/images/products/boot-redis1.png",
-                    Brand = "Redis",
-                    Type = "Boots",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Core Red Boots",
-                    Description =
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-                    Price = 18999,
-                    PictureUrl = "/images/products/boot-core2.png",
-                    Brand = "Redis",
-                    Type = "Boots",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Core Purple Boots",
-                    Description =
-                        "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
-                    Price = 19999,
-                    PictureUrl = "/images/products/boot-core1.png",
-                    Brand = "NetCore",
-                    Type = "Boots",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Angular Purple Boots",
-                    Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
-                    Price = 15000,
-                    PictureUrl = "/images/products/boot-ang2.png",
-                    Brand = "Angular",
-                    Type = "Boots",
-                    QuantityInStock = 100
-                },
-                new Product
-                {
-                    Name = "Angular Blue Boots",
-                    Description =
-                        "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
-                    Price = 18000,
-                    PictureUrl = "/images/products/boot-ang1.png",
-                    Brand = "Angular",
-                    Type = "Boots",
+                    PictureUrl = "/images/products/smartphone-purple.png",
+                    Brand = "EEE",
+                    Type = "Smartphone",
                     QuantityInStock = 100
                 },
             };
