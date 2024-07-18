@@ -33,7 +33,7 @@ interface Props {
 export default function  Header({darkMode, handleThemeChange}: Props){
     return (
         <AppBar position="static" sx={{mb: 4}}>
-            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   {/*导航栏的布局设置*/}
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>   {/*导航栏的布局设置*/}
                 <Box>
                     <Typography variant="h6" component={NavLink} 
                         to ='/'

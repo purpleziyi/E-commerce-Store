@@ -21,13 +21,13 @@ export default function ProductCard({ product }: Props) {
                 }}
             />
             <CardMedia
-                sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'primary.light'}}
+                sx={{ height: 140, backgroundSize: 'contain', bgcolor: '#ede7f6'}}
                 image={product.pictureUrl}
                 title={product.name}
             />
             <CardContent>
                 <Typography gutterBottom color='secondary' variant="h5" >
-                    ${(product.price / 100).toFixed(2)}  {/* 价格细节 */}
+                    $ {(product.price / 10).toFixed(2)}  {/* 价格细节 */}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {product.brand} / {product.type}

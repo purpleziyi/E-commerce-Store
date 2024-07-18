@@ -2,13 +2,17 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 
+// 在JS中处理异步代码
+const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
+
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
 // create a help-method 以下写法保证了代码的简洁
 const responseBody = (response: AxiosResponse) => response.data;
 
 // use interceptor checking error-state
-axios.interceptors.response.use (response => {
+axios.interceptors.response.use (async response => {
+    await sleep();  // 使用sleep方法delay 500ms
     return response
 }, (error: AxiosError) => {
     const { data, status } = error.response as AxiosResponse; //将error指定为AxiosResponse，以便我们从interceptor中删除该error
@@ -43,8 +47,8 @@ axios.interceptors.response.use (response => {
 // define a request-object
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody),  // get-attribute,param is url, send a HTTP GET-request to the url
-    post: (url: string, body:{}) => axios.post(url, body).then(responseBody),
-    put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+    post: (url: string, body: object) => axios.post(url, body).then(responseBody),
+    put: (url: string, body: object) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody),
 }
 
