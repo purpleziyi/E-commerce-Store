@@ -22,12 +22,13 @@ namespace API.Entities
         if (existingItem != null) existingItem.Quantity += quantity;
     }
 
-    public void RemoveItem(int productId, int quantity = 1)
+    public void RemoveItem(int productId, int quantity)
     {
-        var item = Items.FirstOrDefault(basketItem => basketItem.ProductId == productId);
+        var item = Items.FirstOrDefault(basketItem => basketItem.ProductId == productId);  // check if we have the item or not
         if (item == null) return;
-        item.Quantity -= quantity;
-        if (item.Quantity == 0) Items.Remove(item);
+        item.Quantity -= quantity;  // if we have the item,then reduce the quantity
+        if (item.Quantity == 0) Items.Remove(item);  // if the quantity equals 0,then remove the item
+        
     }
 
     }
