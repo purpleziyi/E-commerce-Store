@@ -1,12 +1,24 @@
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
 import { Product } from "../../app/models/product";
 import { Link } from 'react-router-dom';
+import { useState } from "react";
+import agent from "../../app/api/agent";
+import { LoadingButton } from '@mui/lab';
 
 interface Props {
     product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
+    const [loading, setLoading] = useState(false);
+
+    function handleAddItem(productId: number){  // 用于向购物车中添加项目的回调函数
+        setLoading(true);
+        agent.Basket.addItem(productId)
+            .catch(error => console.log(error))
+            .finally(() => setLoading(false));  // use finally to close loading
+    }
+
     return ( 
         <Card >
             <CardHeader
@@ -33,8 +45,12 @@ export default function ProductCard({ product }: Props) {
                     {product.brand} / {product.type}
                 </Typography>
             </CardContent>
+
             <CardActions>
-                <Button size="small">Add to cart</Button>
+                <LoadingButton 
+                    loading={loading} 
+                    onClick={() => handleAddItem(product.id)} 
+                    size="small">Add to cart</LoadingButton>   {/* 该LoadingButton按钮点击时触发回调函数handleAddItem */}
                 <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button> {/*点击View会跳转至该产品的details页面*/}
             </CardActions>
         </Card>

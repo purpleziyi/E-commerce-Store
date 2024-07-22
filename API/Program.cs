@@ -31,7 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(opt => {
     // request header from client to server, allow any method, specify origin is localhost 3000
-    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");  // 在编辑好basketDto相关代码后，在此加上AllowCredentials
 });
 
 app.UseAuthentication();

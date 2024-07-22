@@ -6,6 +6,7 @@ import { router } from "../router/Routes";
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
+axios.defaults.withCredentials = true;  // browser将收到cookie，APP中存储中将设置cookie
 
 // create a help-method 以下写法保证了代码的简洁
 const responseBody = (response: AxiosResponse) => response.data;
@@ -66,9 +67,21 @@ const TestErrors = {
     getValidationError: () => requests.get('buggy/validation-error')
 }
 
+// create a basket-object
+const Basket = {
+    get: () => requests.get('basket'),
+
+    // 向购物车添加项目 make sure that the params are in line with the basketController's HttpPost params
+    addItem: (productId: number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),  //需要空对象{}来执行此请求
+
+    // make sure that the params are in line with the basketController's HttpDelete params
+    removeItem: (productId: number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`)
+}
+
 const agent = {
     Catalog,
-    TestErrors
+    TestErrors,
+    Basket
 }
 
 export default agent;
