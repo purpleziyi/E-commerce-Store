@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useState } from "react";
 import agent from "../../app/api/agent";
 import { LoadingButton } from '@mui/lab';
+import { useStoreContext } from "../../app/context/StoreContext";
 
 interface Props {
     product: Product;
@@ -11,10 +12,12 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
     const [loading, setLoading] = useState(false);
+    const {setBasket} = useStoreContext();
 
     function handleAddItem(productId: number){  // 用于向购物车中添加项目的回调函数
         setLoading(true);
         agent.Basket.addItem(productId)
+            .then(basket => setBasket(basket))  // 当购物车中添加物品后，会马上使用setBasket来添加，这样catalog页面上的购物车右上badge会及时更新
             .catch(error => console.log(error))
             .finally(() => setLoading(false));  // use finally to close loading
     }
