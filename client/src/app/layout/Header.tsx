@@ -69,7 +69,7 @@ export default function  Header({darkMode, handleThemeChange}: Props){
                             <ShoppingCart />
                         </Badge>
                     </IconButton>
-
+ 
                     <List sx={{ display: 'flex' }}>
                         {rightLinks.map(({ title, path }) => (
                             <ListItem
