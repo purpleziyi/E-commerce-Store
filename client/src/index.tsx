@@ -9,15 +9,19 @@ import '@fontsource/roboto/700.css';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Routes.js';
 import { StoreProvider } from './app/context/StoreContext.js';
+import { Provider } from 'react-redux';
+import { store } from './app/store/configureStore';
+ 
 
-
-
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 root.render(
   <React.StrictMode> 
-    <StoreProvider> {/*centralized state*/}
-      <RouterProvider router={router} /> 
-    </StoreProvider>
+ 
+      <Provider store={store}>
+        <RouterProvider router={router} /> 
+      </Provider>        
       
   </React.StrictMode>
 );
