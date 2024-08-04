@@ -1,12 +1,9 @@
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
 import { Product } from "../../app/models/product";
 import { Link } from 'react-router-dom';
-import { useState } from "react";
-import agent from "../../app/api/agent";
 import { LoadingButton } from '@mui/lab';
-import { useStoreContext } from "../../app/context/StoreContext";
-import { useAppDispatch } from "../../app/store/configureStore";
-import { setBasket } from "../basket/basketSlice";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { addBasketItemAsync } from "../basket/basketSlice";
 
 
 interface Props {
@@ -14,16 +11,17 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
-    const [loading, setLoading] = useState(false);
-    const dispatch = useAppDispatch();
+    const {state} = useAppSelector(state => state.basket);
+    const dispatch = useAppDispatch();  // 需要使用dispatch来分派异步函数
 
-    function handleAddItem(productId: number){  // 用于向购物车中添加项目的回调函数
-        setLoading(true);
-        agent.Basket.addItem(productId)
-            .then(basket => dispatch(setBasket(basket)))  // 当购物车中添加物品后，会马上使用setBasket来添加，这样catalog页面上的购物车右上badge会及时更新
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false));  // use finally to close loading
-    }
+    // 异步函数代码中不再需要一下方法
+    // function handleAddItem(productId: number){  // 用于向购物车中添加项目的回调函数
+    //     setLoading(true);
+    //     agent.Basket.addItem(productId)
+    //         .then(basket => dispatch(setBasket(basket)))  // 当购物车中添加物品后，会马上使用setBasket来添加，这样catalog页面上的购物车右上badge会及时更新
+    //         .catch(error => console.log(error))
+    //         .finally(() => setLoading(false));  // use finally to close loading
+    // }
 
     return ( 
         <Card >
@@ -54,8 +52,8 @@ export default function ProductCard({ product }: Props) {
 
             <CardActions>
                 <LoadingButton 
-                    loading={loading} 
-                    onClick={() => handleAddItem(product.id)} 
+                    loading={status.includes('pendingAddItem' + product.id)} 
+                    onClick={() => dispatch(addBasketItemAsync({productId: product.id}))}  
                     size="small">Add to cart</LoadingButton>   {/* 该LoadingButton按钮点击时触发回调函数handleAddItem */}
                 <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button> {/*点击View会跳转至该产品的details页面*/}
             </CardActions>

@@ -1,5 +1,4 @@
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow,  TextField,  Typography } from "@mui/material";
-
 import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
@@ -7,17 +6,16 @@ import agent from "../../app/api/agent";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { LoadingButton } from "@mui/lab";
 import { useAppSelector, useAppDispatch } from "../../app/store/configureStore";
-import { setBasket, removeItem } from "../basket/basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
 
 
 export default function ProductDetails() {
-    const { basket } = useAppSelector(state => state.basket);
+    const { basket, status } = useAppSelector(state => state.basket);
     const dispatch = useAppDispatch();
     const { id } = useParams<{ id: string }>();  // 从useParams中获得产品的id
     const [product, setProduct] = useState<Product | null>(null);  // initialized value
     const [loading, setLoading] = useState(true); // add loading state
     const [quantity, setQuantity] = useState(0);
-    const [submitting, setSubmitting] = useState(false);
     const item = basket?.items.find(i => i.productId === product?.id);
 
     useEffect(() => {
@@ -27,7 +25,7 @@ export default function ProductDetails() {
             .catch(error => console.log(error.response))  // check errors
             .finally(() => setLoading(false));
     }, [id,item]) //当依赖项参数id改变时，useEffect会被再次调用
-
+    
     // 处理输入的变化
     function handleInputChange(event: ChangeEvent<HTMLInputElement>){
         if (parseInt(event.currentTarget.value) >= 0) {   // "quantity in cart" cannot be less than 0
@@ -36,21 +34,15 @@ export default function ProductDetails() {
     }
 
     function handleUpdateCart() {
-        if (!product) return;
-        setSubmitting(true);
         // check if we have item or not
         if (!item || quantity > item.quantity) {
             const updatedQuantity = item ? quantity - item.quantity : quantity;
-            agent.Basket.addItem(product.id, updatedQuantity)
-                .then(basket => dispatch(setBasket(basket)))
-                .catch(error => console.log(error))
-                .finally(() => setSubmitting(false))
+            // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+            dispatch(addBasketItemAsync({productId: product?.id!, quantity: updatedQuantity}))
         } else {
             const updatedQuantity = item.quantity - quantity;
-            agent.Basket.removeItem(product.id, updatedQuantity)
-                .then(() => dispatch(removeItem({productId: product?.id!, quantity: updatedQuantity})))
-                .catch(error => console.log(error))
-                .finally(() => setSubmitting(false));
+            // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+            dispatch(removeBasketItemAsync({ productId: product?.id!, quantity: updatedQuantity }))
         }
     }
 
@@ -111,7 +103,7 @@ export default function ProductDetails() {
                 <Grid item xs={6}>
                     <LoadingButton
                         disabled={item?.quantity === quantity || !item && quantity === 0 }  // 当改变的数量与之前的数量相同，则更新按钮不能使用
-                        loading ={submitting}
+                        loading ={status.includes('pendingRemoveItem' + item?.productId)}
                         onClick={handleUpdateCart}
                         sx={{height: '55ps'}}
                         color="primary"

@@ -12,9 +12,9 @@ import CheckoutPage from "../../features/checkout/CheckoutPage";
 
 export const router = createBrowserRouter([
     {
-        path: '/',
+        path: '/',  // First routing
         element: <App/>,
-        children:[
+        children: [  // Secondary Routing， 注意二级路由的path中 最前方没有/ 
             { path: '', element:<HomePage/>},
             { path: 'catalog', element: <Catalog /> },
             { path: 'catalog/:id', element: <ProductDetails /> },
@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
             { path: '/not-found', element: <NotFound /> },
             { path: 'basket', element: <BasketPage /> },
             { path: 'checkout', element: <CheckoutPage /> },
-            { path: '*', element: <Navigate replace to='/not-found' /> },
+            { path: '*', element: <Navigate replace to='/not-found' /> }, //Navigate用于重定向   
         ]
     }
 ])
