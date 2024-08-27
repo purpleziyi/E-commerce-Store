@@ -33,7 +33,7 @@ namespace API.Controllers
             var basket = await RetrieveBasket();  // get basket || create basket
             if (basket == null) basket = CreateBasket();            
             var product = await _context.Products.FindAsync(productId); // get product
-            if (product == null) return NotFound();
+            if (product == null) return BadRequest(new ProblemDetails { Title = "Product not found" });
             basket.AddItem(product, quantity); // add item (using method in Basket entity class)
             
             var result = await _context.SaveChangesAsync() > 0; // save changes, 判断save的内容是否大于0

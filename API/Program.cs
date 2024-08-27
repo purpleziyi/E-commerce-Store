@@ -44,7 +44,7 @@ var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
 try
-{
+{ 
     context.Database.Migrate();
     DbInitializer.Initialize(context);   // 调用初始化方法
 }
