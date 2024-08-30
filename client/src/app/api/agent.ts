@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
+import { PaginatedResponse } from "../models/pagination";
 
 // 在JS中处理异步代码
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
@@ -14,6 +15,11 @@ const responseBody = (response: AxiosResponse) => response.data;
 // use interceptor checking error-state
 axios.interceptors.response.use (async response => {
     await sleep();  // 使用sleep方法delay 500ms
+    const pagination = response.headers['pagination'];  // response only uses lowercase
+    if (pagination){
+        response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+        return response;
+    }
     return response
 }, (error: AxiosError) => {
     const { data, status } = error.response as AxiosResponse; //将error指定为AxiosResponse，以便我们从interceptor中删除该error
@@ -47,15 +53,16 @@ axios.interceptors.response.use (async response => {
 
 // define a request-object
 const requests = {
-    get: (url: string) => axios.get(url).then(responseBody),  // get-attribute,param is url, send a HTTP GET-request to the url
+    get: (url: string, params?: URLSearchParams) => axios.get(url, { params }).then(responseBody),  // get-attribute,param is url, send a HTTP GET-request to the url
     post: (url: string, body: object) => axios.post(url, body).then(responseBody),
     put: (url: string, body: object) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody),
 }
 
 const Catalog = {
-    list: () => requests.get('products'),
-    details: (id: number) => requests.get(`products/${id}`)  // 反引号用于定义模板字符串，当需要在字符串中嵌入变量或表达式时
+    list: (params: URLSearchParams) => requests.get('products', params),
+    details: (id: number) => requests.get(`products/${id}`),  // 反引号用于定义模板字符串，当需要在字符串中嵌入变量或表达式时
+    fetchFilters: () => requests.get('products/filters')
 }
 
 // create testerror-object
