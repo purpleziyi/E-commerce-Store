@@ -1,14 +1,37 @@
 
 using System.ComponentModel;
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(StoreContext context)
+        public static async Task Initialize(StoreContext context, UserManager<User> userManager)  // Task 是表示异步操作的类型, 表示该方法不返回任何具体值，但会完成一个异步任务
         {
-            if (context.Products.Any()) return; // 检查集合（数据库表Products）中是否存在任何元素。如果有就返回
+            if (!userManager.Users.Any())  // check wether there is any user in the DB 
+            {   // if there is no user, then create a new user-object 
+                var user = new User
+                {
+                    UserName = "ziyi",
+                    Email = "ziyi@test.com"
+                };
+                // CreateAsync 用于创建新用户并存储到数据库中
+                await userManager.CreateAsync(user, "Pa$$w0rd");  // Pa$$w0rd 是新用户的初始密码
+                await userManager.AddToRoleAsync(user, "Member");
+
+                var admin = new User
+                {
+                    UserName = "admin",
+                    Email = "admin@test.com"
+                };
+
+                await userManager.CreateAsync(admin, "Pa$$w0rd");
+                await userManager.AddToRolesAsync(admin, new[] { "Admin", "Member" });
+
+            }
+
+                if (context.Products.Any()) return; // 检查集合（数据库表Products）中是否存在任何元素。如果有就返回
 
             // create a new product-list
             var products = new List<Product>

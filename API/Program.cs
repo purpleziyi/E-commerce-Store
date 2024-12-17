@@ -1,5 +1,7 @@
 using API.Data;
+using API.Entities;
 using API.Middleware;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,12 @@ builder.Services.AddDbContext<StoreContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();  // 由于frontend用3000 port，backed用5000 port，所以解决 cross-domain
+builder.Services.AddIdentityCore<User>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<StoreContext>();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
 
@@ -31,7 +39,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(opt => {
     // request header from client to server, allow any method, specify origin is localhost 3000
-    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");  // 在编辑好basketDto相关代码后，在此加上AllowCredentials
+    opt.AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("http://localhost:3000");  // 在编辑好basketDto相关代码后，在此加上AllowCredentials
 });
 
 app.UseAuthentication();
@@ -41,12 +52,13 @@ app.MapControllers();
 
 var scope = app.Services.CreateScope();  // create a scope and store into this scope-variable
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
 try
 { 
-    context.Database.Migrate();
-    DbInitializer.Initialize(context);   // 调用初始化方法
+    await context.Database.MigrateAsync();
+    await DbInitializer.Initialize(context, userManager);   // 调用初始化方法
 }
 catch (Exception ex)
 {
