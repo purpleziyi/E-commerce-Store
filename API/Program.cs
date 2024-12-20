@@ -19,7 +19,10 @@ builder.Services.AddDbContext<StoreContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();  // 由于frontend用3000 port，backed用5000 port，所以解决 cross-domain
-builder.Services.AddIdentityCore<User>()
+builder.Services.AddIdentityCore<User>(opt => 
+{
+    opt.User.RequireUniqueEmail = true; // enable unique email to prevent duplicated email stored in DB 
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<StoreContext>();
 builder.Services.AddAuthentication();
