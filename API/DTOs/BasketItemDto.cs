@@ -1,7 +1,7 @@
 
 namespace API.DTOs
 {
-    public class BasketItemDto
+    public class BasketItemDto   // 定义购物车中每个商品项的结构
     {
         public int ProductId { get; set; }
         public string Name { get; set; }
