@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,35 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();  // 容器中内容的顺序不重要
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>  // Configure the Swagger generator to generate API documentation
+{
+    // Include 'SecurityScheme' to use JWT Authentication
+    var jwtSecurityScheme = new OpenApiSecurityScheme  // Define a JWT security scheme to support JWT authentication in Swagger
+    {
+        BearerFormat = "JWT",  // Specifies the token format is JWT
+        Name = "Authorization", // Set the parameter name in the HTTP request header as 'Authorization'
+        In = ParameterLocation.Header, // Specifies token be passed within the HTTP request header
+        Type = SecuritySchemeType.ApiKey,  //设置认证方案的类型为 API 密钥（ApiKey）
+        Scheme = JwtBearerDefaults.AuthenticationScheme,  // 设置认证方案为 JWT Bearer
+        Description = "Put Bearer + your token in the box below",  // Tell users how to use Bearer Token
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    // Add the defined JWT security scheme to the Swagger security definition
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+
+});
+
 
 //  put DBContext into container , pass configuration-obj as param
 builder.Services.AddDbContext<StoreContext>(opt =>
@@ -52,10 +81,13 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.    app中的middleware内容顺序比较重要
 app.UseMiddleware<ExceptionMiddleware>();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())  // 中间件的顺序要在其他中间件之前
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true"); //no need to paste token when refreshing the browser
+    });
 }
 
 app.UseCors(opt => {
