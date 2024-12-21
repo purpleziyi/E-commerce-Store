@@ -1,9 +1,12 @@
+using System.Text;
 using API.Data;
 using API.Entities;
 using API.Middleware;
 using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +29,20 @@ builder.Services.AddIdentityCore<User>(opt =>
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<StoreContext>();
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // tell API use the JWT Bearer authentication scheme
+    .AddJwtBearer (opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters  // specify how to verify the JWT
+        {
+            ValidateIssuer = false,  //the issuer of the token is not verified,  for simple scenarios or development stages
+            ValidateAudience = false, // Audience of the token is not verified
+            ValidateLifetime = true,  // Verify the token signing key is correct
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8  // we use same key to decrypt the signature
+                .GetBytes(builder.Configuration["JWTSettings:TokenKey"])) // 使用对称加密密钥（从appsettings文件中读取TokenKey）来验证签名的真实性
+        };
+    });
+
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();  // when we process the http-request, the service keeps alive   
 
@@ -50,7 +66,8 @@ app.UseCors(opt => {
     .WithOrigins("http://localhost:3000");  // 在编辑好basketDto相关代码后，在此加上AllowCredentials
 });
 
-app.UseAuthentication();
+app.UseAuthentication();  // firstly checking who these users are
+app.UseAuthorization();  // then authorizing the user to access to our APP
 
 app.MapControllers();
 
