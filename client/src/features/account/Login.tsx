@@ -8,9 +8,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import ForgotPassword from './ForgotPassword';
-import { Container, Grid, Paper } from '@mui/material';
+// import ForgotPassword from './ForgotPassword';
+import { Container, Paper } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+// import { Password } from '@mui/icons-material';
+import agent from '../../app/api/agent';
 
 
 
@@ -35,55 +37,20 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 
 export default function Login() {
-    const [emailError, setEmailError] = React.useState(false);
-    const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-    const [open, setOpen] = React.useState(false);
+    const[values, setValues] = React.useState({
+        username: '',
+        password: ''
+    })
 
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+        agent.Account.login(values);
+    }
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        if (emailError || passwordError) {
-            event.preventDefault();
-            return;
-        }
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
-
-    const validateInputs = () => {
-        const email = document.getElementById('email') as HTMLInputElement;
-        const password = document.getElementById('password') as HTMLInputElement;
-
-        let isValid = true;
-
-        if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-            setEmailError(true);
-            setEmailErrorMessage('Please enter a valid email address.');
-            isValid = false;
-        } else {
-            setEmailError(false);
-            setEmailErrorMessage('');
-        }
-
-        if (!password.value || password.value.length < 6) {
-            setPasswordError(true);
-            setPasswordErrorMessage('Password must be at least 6 characters long.');
-            isValid = false;
-        } else {
-            setPasswordError(false);
-            setPasswordErrorMessage('');
-        }
-
-        return isValid;
-    };
+    function handleInputChange(event: any) {
+        const {name, value} = event.target;  // 每个event都有一个target-object的属性
+        setValues({...values, [name]: value});
+    }
 
     return (
         <Container
@@ -109,46 +76,42 @@ export default function Login() {
                         gap: 2,
                     }}
                 >
-                    <FormControl>
-                        <FormLabel htmlFor="email">Email</FormLabel>
+                    {/* <FormControl> */}
+                        <FormLabel htmlFor="username">Username</FormLabel>
                         <TextField
-                            error={emailError}
-                            helperText={emailErrorMessage}
-                            id="email"
-                            type="email"
-                            name="email"
-                            placeholder="your@email.com"
-                            autoComplete="email"
-                            autoFocus
-                            required
                             fullWidth
+                            label="Username"
+                            autoComplete="username"
+                            autoFocus
+                            name="username"  // name 属性的值要确保与 values 对象中的键一致
+                            // required
                             variant="outlined"
-                            color={emailError ? 'error' : 'primary'}
+                            onChange={handleInputChange}
+                            value = {values.username}
                         />
-                    </FormControl>
+                    {/* </FormControl> */}
                     <FormControl>
                         <FormLabel htmlFor="password">Password</FormLabel>
                         <TextField
-                            error={passwordError}
-                            helperText={passwordErrorMessage}
                             name="password"
-                            placeholder="••••••"
+                            label = "password"
+                            placeholder="••••••••"
                             type="password"
-                            id="password"
                             autoComplete="current-password"
                             autoFocus
-                            required
+                            // required
                             fullWidth
                             variant="outlined"
-                            color={passwordError ? 'error' : 'primary'}
+                            onChange={handleInputChange}
+                            value={values.password}
+
                         />
                     </FormControl>
-                    <ForgotPassword open={open} handleClose={handleClose} />
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
-                        onClick={validateInputs}
+                        sx={{ mt:3, mb:2 }}
                     >
                         Login
                     </Button>
