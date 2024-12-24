@@ -13,6 +13,8 @@ import { Container, Paper } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 // import { Password } from '@mui/icons-material';
 import agent from '../../app/api/agent';
+import { FieldValue, FieldValues, useForm } from 'react-hook-form';
+import { LoadingButton } from '@mui/lab';
 
 
 
@@ -37,20 +39,33 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 
 export default function Login() {
-    const[values, setValues] = React.useState({
-        username: '',
-        password: ''
-    })
+    const {register, handleSubmit,formState:{isSubmitting, errors, isValid}} = useForm({
+        mode: 'onTouched'
+    }) // use handleSubmit from useForm
 
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        agent.Account.login(values);
+    
+    async function submitForm(data: FieldValues) {  // data是React Hook Form提供的提交数据对象（表单的键值对）
+        try{
+            await agent.Account.login(data);
+        } catch (error) {
+            console.log(error);            
+        }        
     }
 
-    function handleInputChange(event: any) {
-        const {name, value} = event.target;  // 每个event都有一个target-object的属性
-        setValues({...values, [name]: value});
-    }
+    // const[values, setValues] = React.useState({
+    //     username: '',
+    //     password: ''
+    // })
+
+    // const handleSubmit = (event: any) => {
+    //     event.preventDefault();
+    //     agent.Account.login(values);
+    // }
+
+    // function handleInputChange(event: any) {
+    //     const {name, value} = event.target;  // 每个event都有一个target-object的属性
+    //     setValues({...values, [name]: value});
+    // }
 
     return (
         <Container
@@ -67,7 +82,7 @@ export default function Login() {
                 </Typography>
                 <Box
                     component="form"
-                    onSubmit={handleSubmit}
+                    onSubmit={handleSubmit(submitForm)}
                     noValidate
                     sx={{
                         display: 'flex',
@@ -76,25 +91,21 @@ export default function Login() {
                         gap: 2,
                     }}
                 >
-                    {/* <FormControl> */}
-                        <FormLabel htmlFor="username">Username</FormLabel>
-                        <TextField
-                            fullWidth
-                            label="Username"
-                            autoComplete="username"
-                            autoFocus
-                            name="username"  // name 属性的值要确保与 values 对象中的键一致
-                            // required
-                            variant="outlined"
-                            onChange={handleInputChange}
-                            value = {values.username}
-                        />
-                    {/* </FormControl> */}
+                    <FormLabel htmlFor="username">Username</FormLabel>
+                    <TextField
+                        fullWidth
+                        label="Username"
+                        autoComplete="username"
+                        autoFocus
+                        variant="outlined"
+                        {...register('username', { required: 'Username is required' })}
+                        error={!!errors.username}
+                        helperText={errors?.username?.message as string}
+                    />
                     <FormControl>
                         <FormLabel htmlFor="password">Password</FormLabel>
                         <TextField
-                            name="password"
-                            label = "password"
+                            // label = "password"
                             placeholder="••••••••"
                             type="password"
                             autoComplete="current-password"
@@ -102,19 +113,20 @@ export default function Login() {
                             // required
                             fullWidth
                             variant="outlined"
-                            onChange={handleInputChange}
-                            value={values.password}
-
+                            {...register('password', { required: 'Password is required' })}
+                            error={!!errors.password}
+                            helperText={errors?.password?.message as string}
                         />
                     </FormControl>
-                    <Button
+                    <LoadingButton loading={isSubmitting}
+                        disabled={!isValid}  //the Button will be disabled if the form is not valid
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{ mt:3, mb:2 }}
                     >
                         Login
-                    </Button>
+                    </LoadingButton>
                 </Box>
 
                 {/* <Grid container>
