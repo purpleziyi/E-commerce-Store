@@ -4,10 +4,10 @@ import { router } from "../router/Routes";
 import { PaginatedResponse } from "../models/pagination";
 
 // 在JS中处理异步代码
-const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 500)); // 模拟 500 毫秒的延时（用于调试或模拟网络延迟）
 
-axios.defaults.baseURL = 'http://localhost:5000/api/';
-axios.defaults.withCredentials = true;  // browser将收到cookie，APP中存储中将设置cookie
+axios.defaults.baseURL = 'http://localhost:5000/api/';   // 所有请求都以此为前缀
+axios.defaults.withCredentials = true;  // browser将收到cookie，APP中存储中将设置cookie, 允许跨域请求时自动携带 cookie，通常用于身份认证
 
 // create a help-method 以下写法保证了代码的简洁
 const responseBody = (response: AxiosResponse) => response.data;
@@ -48,7 +48,7 @@ axios.interceptors.response.use (async response => {
         default:
             break;
     }
-    return Promise.reject(error.response);    
+    return Promise.reject(error.response);    //其他错误返回一个 Promise.reject，供调用者捕获
 })
 
 // define a request-object
