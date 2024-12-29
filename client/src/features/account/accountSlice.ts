@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { User } from "../../app/models/user";
 import { FieldValues } from "react-hook-form";
 import agent from "../../app/api/agent";
+import { router } from "../../app/router/Routes";
 
 
 interface AccountState {
@@ -39,7 +40,13 @@ export const fetchCurrentUser = createAsyncThunk<User>(  // no need to pass data
 export const accountSlice = createSlice({
     name: 'account',
     initialState,
-    reducers: {},
+    reducers: {
+        signOut: (state) => {
+            state.user = null;  // reset user as null
+            localStorage.removeItem('user');
+            router.navigate('/'); // go to HomePage
+        }
+    },
     extraReducers: (builder => {
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (_state, action) =>{
             _state.user = action.payload;
@@ -50,3 +57,5 @@ export const accountSlice = createSlice({
         })
     })
 })
+
+export const {signOut} = accountSlice.actions;

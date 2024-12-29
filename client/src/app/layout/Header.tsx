@@ -3,6 +3,7 @@ import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typogr
 import { Link, NavLink } from "react-router-dom";
 import { useStoreContext } from "../context/StoreContext";
 import { useAppSelector } from "../store/configureStore";
+import SignedInMenu from "./SignedInMenu";
 
 const midLinks = [
     { title: 'catalog', path: '/catalog' },
@@ -34,7 +35,7 @@ interface Props {
 
 export default function  Header({darkMode, handleThemeChange}: Props){
     const { basket } = useAppSelector(state => state.basket);      // useAppSelector 是一个自定义钩子，用于从 Redux store 中选择状态
-
+    const {user} = useAppSelector(state => state.account);
     // 计算购物车的物品数目。reduce用于将数组中的所有元素归约为一个单一的值,sum 是累加器，保存着归约后的值，0 是累加器的初始值
     const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)  
 
@@ -65,24 +66,29 @@ export default function  Header({darkMode, handleThemeChange}: Props){
                 </List>
 
                 <Box display='flex' alignItems='center'>
-                    <IconButton component={Link} to='/basket' size='large' sx={{ color: 'inherit' }}>  {/*midlinks和rightlinks中间的购物车标志*/}
-                        <Badge badgeContent={itemCount} color='secondary'>  {/* 购物车中存储的item数目*/}
+                    <IconButton component={Link} to='/basket' size='large' edge='start' color='inherit' sx={{ mr: 2 }}>
+                        <Badge badgeContent={itemCount} color='secondary'>
                             <ShoppingCart />
                         </Badge>
                     </IconButton>
- 
-                    <List sx={{ display: 'flex' }}>
-                        {rightLinks.map(({ title, path }) => (
-                            <ListItem
-                                component={NavLink}
-                                to={path}
-                                key={path}
-                                sx={navStyles}
-                            >
-                                {title.toUpperCase()}
-                            </ListItem>
-                        ))}
-                    </List>
+
+                    {user ? (
+                        <SignedInMenu />
+                    ) : (
+                        <List sx={{ display: 'flex' }}>
+                            {rightLinks.map(({ title, path }) => (
+                                <ListItem
+                                    component={NavLink}
+                                    to={path}
+                                    key={path}
+                                    sx={navStyles}
+                                >
+                                    {title.toUpperCase()}
+                                </ListItem>
+                            ))}
+                        </List>
+                    ) }
+
                 </Box>
             </Toolbar>
 
