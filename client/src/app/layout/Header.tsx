@@ -88,10 +88,8 @@ export default function  Header({darkMode, handleThemeChange}: Props){
                             ))}
                         </List>
                     ) }
-
                 </Box>
             </Toolbar>
-
         </AppBar>
     )
 }

@@ -10,6 +10,7 @@ import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import { useAppDispatch } from "../store/configureStore";
 import { setBasket } from "../../features/basket/basketSlice";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 
 function App() {
   const dispatch = useAppDispatch();   
@@ -18,6 +19,7 @@ function App() {
   // get the basket based on the cookie
   useEffect(() => {
     const buyerId = getCookie('buyerId');  // 先检查一下或拿到buyerId
+    dispatch(fetchCurrentUser());
     if(buyerId){
       agent.Basket.get()
         .then(basket => dispatch(setBasket(basket)))  // 从basketSlice中拿到basket，然后用setBasket方法传入basket，此处的dispatch将成为后续的依赖关系

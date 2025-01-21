@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 import { PaginatedResponse } from "../models/pagination";
+import { store } from "../store/configureStore";
 
 // 在JS中处理异步代码
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500)); // 模拟 500 毫秒的延时（用于调试或模拟网络延迟）
@@ -11,6 +12,12 @@ axios.defaults.withCredentials = true;  // browser将收到cookie，APP中存储
 
 // create a help-method 以下写法保证了代码的简洁
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.request.use(config =>{
+    const token = store.getState().account.user?.token;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
 
 // use interceptor checking error-state
 axios.interceptors.response.use (async response => {
@@ -37,10 +44,10 @@ axios.interceptors.response.use (async response => {
             toast.error(data.title);
             break;
         case 401:
-            toast.error(data.title);
+            toast.error(data.title || 'Unauthorised');
             break;
         // case 403:
-        //     toast.error('You are not allowed to do that!');
+        //     toast.error('You are not allowed to do that!'); 
         //     break;
         case 500:
             router.navigate('/server-error', {state: {error: data}});  // pass the 'data' to the 'state' of the route we navigate to
