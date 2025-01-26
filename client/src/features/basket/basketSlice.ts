@@ -1,7 +1,8 @@
 
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { Basket } from "../../app/models/basket";
 import agent from "../../app/api/agent";
+import { getCookie } from "../../app/util/util";
 
 interface BasketState {
     basket: Basket | null;
@@ -12,6 +13,22 @@ const initialState: BasketState = {
     basket: null,
     status: 'idle'   
 }
+
+export const fetchBasketAsync = createAsyncThunk<Basket>(
+    'basket/fetchBasketAsync',
+    async(_, thunkAPI) => {
+        try{
+            return await agent.Basket.get();
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({error: error.data});
+        }
+    },
+    {  // 当没有buyerId时(在inspect中的application中查看Cookies),返回false，以防止调用该函数
+        condition: () => {
+            if (!getCookie('buyerId')) return false;
+        }
+    }
+)
 
 // 异步添加购物车物品
 export const addBasketItemAsync =  createAsyncThunk<Basket, {productId: number, quantity?: number }>(
@@ -26,7 +43,7 @@ export const addBasketItemAsync =  createAsyncThunk<Basket, {productId: number, 
 )
 
 export const removeBasketItemAsync = createAsyncThunk<void, { productId: number, quantity: number, name?: string }>(
-        'basket/removeBasketItemASync',
+    'basket/removeBasketItemASync',
     async ({ productId, quantity }, thunkAPI) => {
             try {
                 await agent.Basket.removeItem(productId, quantity);
@@ -48,14 +65,6 @@ export const basketSlice = createSlice({
         builder.addCase(addBasketItemAsync.pending, (state, action) => {        
             state.status = 'pendingAddItem' + action.meta.arg.productId;
         });
-        builder.addCase(addBasketItemAsync.fulfilled, (state, action) => {
-            state.basket = action.payload;
-            state.status ='idle';  // 将加载状态设置为“闲置”
-        });
-        builder.addCase(addBasketItemAsync.rejected, (state, action) => {            
-            state.status = 'idle';  // 将加载状态设置为“闲置”
-            console.log(action.payload);
-        });
         builder.addCase(removeBasketItemAsync.pending, (state, action) => {
             state.status = 'pendingRemoveItem' + action.meta.arg.productId + action.meta.arg.name;
         });
@@ -71,7 +80,15 @@ export const basketSlice = createSlice({
         builder.addCase(removeBasketItemAsync.rejected, (state, action) => {
             state.status = 'idle';
             console.log(action.payload);
-        })
+        });
+        builder.addMatcher(isAnyOf(addBasketItemAsync.fulfilled, fetchBasketAsync.fulfilled), (state, action) => {
+            state.basket = action.payload;
+            state.status = 'idle';  // 将加载状态设置为“闲置”
+        });
+        builder.addMatcher(isAnyOf(addBasketItemAsync.rejected, fetchBasketAsync.rejected), (state, action) => {
+            state.status = 'idle';  // 将加载状态设置为“闲置”
+            console.log(action.payload);
+        });
     })
 })
 

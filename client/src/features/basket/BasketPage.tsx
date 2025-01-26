@@ -84,8 +84,7 @@ export default function BasketPage(){
                     Checkout
                 </Button>
             </Grid>
-        </Grid>
-        
+        </Grid>        
     </>
         
     )

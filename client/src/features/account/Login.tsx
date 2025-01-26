@@ -1,21 +1,17 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 // import ForgotPassword from './ForgotPassword';
-import { Container, Paper } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Container, Grid, Paper } from '@mui/material';
+import { Link , useNavigate } from 'react-router-dom';
 // import { Password } from '@mui/icons-material';
-import agent from '../../app/api/agent';
-import { FieldValue, FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
-import { useDispatch } from 'react-redux';
 import { signInUser } from './accountSlice';
 import { useAppDispatch } from '../../app/store/configureStore';
 
@@ -132,19 +128,19 @@ export default function Login() {
                     </LoadingButton>
                 </Box>
 
-                {/* <Grid container>
+                <Grid container>
                     <Grid item>
                         <Link to='/register' style={{ textDecoration: 'none' }}>
                             {"Don't have an account? Sign Up"}
                         </Link>
                     </Grid>
-                </Grid> */}
-                <Typography>
+                </Grid>
+                {/* <Typography>
                     Don&apos;t have an account?{' '}
                     <Link component={RouterLink} to="/register" variant="body2">
                         Sign up
                     </Link>
-                </Typography>
+                </Typography> */}
             </Card>
         </Container>
     );
