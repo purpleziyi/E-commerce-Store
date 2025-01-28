@@ -9,5 +9,6 @@ namespace API.DTOs
     {
         public string Email {get; set;}  // user interface will display user's email
         public string Token { get; set; }
+        public BasketDto Basket { get; set; }
     }
 }
