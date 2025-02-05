@@ -1,5 +1,6 @@
 
 using API.Entities;
+using API.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace API.Data
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Basket> Baskets { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)  // 这是DBContext中的可用方法
         {
