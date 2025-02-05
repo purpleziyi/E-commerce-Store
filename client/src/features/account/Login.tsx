@@ -8,7 +8,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 // import ForgotPassword from './ForgotPassword';
 import { Container, Grid, Paper } from '@mui/material';
-import { Link , useNavigate } from 'react-router-dom';
+import { Link , useLocation, useNavigate } from 'react-router-dom';
 // import { Password } from '@mui/icons-material';
 import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
@@ -39,6 +39,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 export default function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useAppDispatch();
     const {register, handleSubmit,formState:{isSubmitting, errors, isValid}} = useForm({
         mode: 'onTouched'
@@ -46,9 +47,12 @@ export default function Login() {
 
     
     async function submitForm(data: FieldValues) {  // data是React Hook Form提供的提交数据对象（表单的键值对）
-        await dispatch(signInUser(data));
-        navigate('/catalog');
-
+        try {
+            await dispatch(signInUser(data));
+            navigate(location.state?.from || '/catalog');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // const[values, setValues] = React.useState({
